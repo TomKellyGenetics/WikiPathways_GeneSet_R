@@ -44,7 +44,8 @@ path2<-as.list(GOTERM)
 pathx<-list()
 for(i in 1:length(path2)) pathx[[i]]<-path2[[i]]@Term
 names(pathx)<-names(path2)
-rm(path2)
+path2<-pathx
+rm(pathx)
 
 #download WikiPathways gpml format and extract Entrez IDS for each pathway (shell script)
 #import WikiPathways into R, extract human read path names (path3), path IDs, and WikiPathways for each Entrez ID / Gene Symbol (R script)
@@ -60,5 +61,6 @@ names(reactome.list)<-unlist(SYMBOL.list)
 path4<-as.list(reactomePATHID2NAME)
 #extract human pathways
 path4<-lapply(path4[grep("Homo sapiens", path4)], function(x) strsplit(x, split=": ")[[1]][2:length(strsplit(x, split=": ")[[1]])])
+path4<-lapply(path4, function(x) if(length(x)>1) paste0(x[1], ": ", x[2]) else x)
 #save files
 save.image("Gene_Set_Data.RData")
